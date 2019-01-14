@@ -2,7 +2,6 @@ extern crate stdweb;
 #[macro_use]
 extern crate yew;
 
-use stdweb::web::Date;
 use yew::prelude::*;
 use yew::services::ConsoleService;
 
@@ -50,7 +49,7 @@ impl Component for Model {
 impl Renderable<Model> for Model {
     fn view(&self) -> Html<Self> {
         html! {
-            <div>
+            <div id="container",>
                 <nav class="menu",>
                     <button onclick=|_| Msg::Increment,>{ "Increment" }</button>
                     <button onclick=|_| Msg::Decrement,>{ "Decrement" }</button>
