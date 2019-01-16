@@ -3,17 +3,22 @@ extern crate stdweb;
 extern crate yew;
 
 use yew::prelude::*;
-use yew::services::ConsoleService;
 
 pub struct Model {
-    console: ConsoleService,
-    value: i64,
+    page: Page,
 }
 
 pub enum Msg {
-    Increment,
-    Decrement,
-    Bulk(Vec<Msg>),
+    SwitchTo(Page),
+}
+
+pub enum Page {
+    Main,
+    Sub,
+}
+
+fn switch(model: & mut Model, page: Page) {
+    model.page = page;
 }
 
 impl Component for Model {
@@ -22,41 +27,45 @@ impl Component for Model {
 
     fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
         Model {
-            console: ConsoleService::new(),
-            value: 0,
+            page: Page::Main,
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Increment => {
-                self.value = self.value + 1;
-                self.console.log("plus one");
+            Msg::SwitchTo(Page::Main) => {
+                switch(self, Page::Main);
             }
-            Msg::Decrement => {
-                self.value = self.value - 1;
-                self.console.log("minus one");
+            Msg::SwitchTo(Page::Sub) => {
+                switch(self, Page::Sub);
             }
-            Msg::Bulk(list) => for msg in list {
-                self.update(msg);
-                self.console.log("Bulk action");
-            },
         }
         true
     }
 }
 
+
 impl Renderable<Model> for Model {
     fn view(&self) -> Html<Self> {
-        html! {
-            <div id="container",>
-                <nav class="menu",>
-                    <button onclick=|_| Msg::Increment,>{ "Increment" }</button>
-                    <button onclick=|_| Msg::Decrement,>{ "Decrement" }</button>
-                    <button onclick=|_| Msg::Bulk(vec![Msg::Increment, Msg::Increment]),>{ "Increment Twice" }</button>
-                </nav>
-                <p>{ self.value }</p>
-            </div>
+        match self.page {
+            Page::Main => html! {
+                <div id="container",>
+                    <nav class="menu",>
+                        <button onclick=|_| Msg::SwitchTo(Page::Main),>{ "Main" }</button>
+                        <button onclick=|_| Msg::SwitchTo(Page::Sub),>{ "Sub" }</button>
+                    </nav>
+                    <p>{ "Main" }</p>
+                </div>
+            },
+            Page::Sub => html! {
+                <div id="container",>
+                    <nav class="menu",>
+                        <button onclick=|_| Msg::SwitchTo(Page::Main),>{ "Main" }</button>
+                        <button onclick=|_| Msg::SwitchTo(Page::Sub),>{ "Sub" }</button>
+                    </nav>
+                    <p>{ "Sub" }</p>
+                </div>
+            },
         }
     }
 }

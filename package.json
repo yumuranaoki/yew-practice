@@ -7,6 +7,8 @@
     "build:css": "node-sass static/scss/style.scss static/css/style.css",
     "build": "npm run build:css && cargo web start",
     "deploy": "cargo web deploy",
+    "browser": "wait-on http://[::1]:8000 && opener http://[::1]:8000",
+    "start": "npm-run-all -p build browser",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,6 +31,7 @@
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.9",
     "npm-run-all": "^4.1.5",
+    "opener": "^1.5.1",
     "postcss": "^7.0.11",
     "postcss-cli": "^6.1.1",
     "rollup": "^1.1.0",
@@ -39,6 +42,7 @@
     "sass-loader": "^7.1.0",
     "serve": "^10.1.1",
     "style-loader": "^0.23.1",
+    "wait-on": "^3.2.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1"
   },
